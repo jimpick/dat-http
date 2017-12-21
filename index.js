@@ -1,10 +1,14 @@
 var url = require('url')
+var path = require('path')
 var request = require('request')
 var datStorage = require('dat-storage')
 
 module.exports = function (host) {
+  var parsedUrl = url.parse(host.replace(/\/$/, ''))
+  var origin = parsedUrl.protocol + '//' + parsedUrl.host
   return datStorage(function (filename) {
-    return HTTPFile(url.resolve(host, filename))
+    return HTTPFile(url.resolve(origin,
+      path.join(parsedUrl.pathname, filename)))
   })
 }
 
